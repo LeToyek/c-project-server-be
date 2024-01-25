@@ -23,22 +23,22 @@ export class UserHandlerImpl implements UserHandler {
     req: CustomRequest<UserLoginReqModel>,
     res: Response
   ): Promise<Response> {
-    try {
-      const { email, password } = req.body;
-      const result = await this.userRepository.getUserByEmailandPassword(
-        email,
-        password
-      );
-      if (result) {
-        return res.json({
-          status: 200,
-          message: "Login Success",
-          data: result,
-        });
-      }
-      return res.json({ status: 404, message: "User Not Found" });
-    } catch (error) {
+    const { email, password } = req.body;
+    const result = await this.userRepository.getUserByEmailandPassword(
+      email,
+      password
+    );
+    if (result) {
       return res.json({
+        status: 200,
+        message: "Login Success",
+        data: result,
+      });
+    }
+    return res.json({ status: 404, message: "User Not Found" });
+    try {
+    } catch (error) {
+      return res.status(500).json({
         status: 500,
         message: "Login Failed " + error,
         error: error,
