@@ -7,17 +7,10 @@ import {
 import { Sequelize } from "sequelize";
 
 export class UserRouters {
-
-  private userRepository: UserRepository;
-  private userHandler: UserHandler;
-
-  constructor(private app: Express, private db: Sequelize) {
-    this.userRepository = new UserRepositoryImpl(db);
-    this.userRepository.getUserByEmailandPassword("toyek@gmail.com","123456")
-    this.userHandler = new UserHandlerImpl(this.userRepository);
+  constructor(private userHandler: UserHandler) {
   }
 
-  public initRouters(): void {
-    this.app.post("/login", this.userHandler.login);
+  public registerRouters(app: Express) {
+    app.post("/users/login", this.userHandler.login);
   }
 }

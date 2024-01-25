@@ -5,6 +5,9 @@ import { User } from "./pkg/repository/db/models/user";
 import { sequelize } from "./pkg/repository/db/instances/sequalize";
 import { initRepository } from "./pkg/repository/repository";
 import { initRouters } from "./routers/routers";
+import { UserRouters } from "./routers/userRouters";
+import { UserHandlerImpl } from "./pkg/handler/userHandler";
+import { UserRepositoryImpl } from "./pkg/repository/userRepository";
 require("dotenv").config();
 
 const app = express();
@@ -30,7 +33,13 @@ const start = async () => {
     await sequelize.authenticate();
     initRepository(sequelize);
     await sequelize.sync();
-    initRouters(app, sequelize);
+    
+    const userRepository = new UserRepositoryImpl(sequelize);
+    const userHandler = new UserHandlerImpl(userRepository);
+    const router = new UserRouters(userHandler);
+
+    router.registerRouters(app);
+    
     
     app.listen(3000, () => {
       console.log("Server started on port http://localhost:3000");
