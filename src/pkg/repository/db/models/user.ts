@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from "sequelize";
 
 type UserAttributes = {
-    id: number;
+    id: string;
     email: string;
     password: string;
     created_at?: Date;
@@ -11,7 +11,7 @@ type UserAttributes = {
 type UserCreationAttributes = Optional<UserAttributes, "id">;
 
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-    declare id: number;
+    declare id: string;
     declare email: string;
     declare password: string;
     declare created_at: Date;
@@ -19,15 +19,17 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 }
 
 export const initUser = (sequelize: any) => {
+    console.log("init user");
     User.init({
         id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4 ,
             primaryKey: true,
         },
         email: {
             type: DataTypes.STRING(100),
             allowNull: false,
+            unique: true,
         },
         password: {
             type: DataTypes.STRING(100),
