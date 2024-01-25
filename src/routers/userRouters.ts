@@ -1,16 +1,14 @@
 import { Express } from "express";
-import { UserHandler, UserHandlerImpl } from "../pkg/handler/userHandler";
-import {
-  UserRepository,
-  UserRepositoryImpl,
-} from "../pkg/repository/userRepository";
-import { Sequelize } from "sequelize";
+import { UserHandler } from "../pkg/handler/userHandler";
 
 export class UserRouters {
-  constructor(private userHandler: UserHandler) {
+  private userHandler: UserHandler;
+
+  constructor(handler: UserHandler) {
+    this.userHandler = handler;
   }
 
-  public registerRouters(app: Express) {
-    app.post("/users/login", this.userHandler.login);
+  public registerRouters(path: string, app: Express): void {
+    app.post(`${path}/login`, this.userHandler.login);
   }
 }

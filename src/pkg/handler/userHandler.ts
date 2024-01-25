@@ -13,7 +13,11 @@ export interface UserHandler {
 }
 
 export class UserHandlerImpl implements UserHandler {
-  constructor(private userRepository: UserRepository) {}
+  private userRepository: UserRepository;
+  
+  constructor(private repository: UserRepository) {
+    this.userRepository = repository
+  }
 
   public async login(
     req: CustomRequest<UserLoginReqModel>,
