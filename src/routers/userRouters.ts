@@ -10,10 +10,8 @@ export class UserRouters {
   }
 
   public registerRouters(path: string, app: Express): void {
-    app.post(`${path}/login`,async (req,res) =>{await this.userHandler.login(req,res)});
-    app.post(`${path}/register`, async (req,res) =>{await this.userHandler.register(req,res)});
-    app.get(`${path}/data`,auth, async (req,res) =>{await this.userHandler.getUserData(req,res)});
-    // app.post(`${path}/login`,this.userHandler.login);
-    // app.get(`${path}/data`, this.userHandler.getUserData);
+    app.post(`${path}/login`, this.userHandler.login);
+    app.post(`${path}/register`, this.userHandler.register);
+    app.get(`${path}/data`, auth, this.userHandler.getUserData);
   }
 }

@@ -1,48 +1,31 @@
 import { Sequelize } from "sequelize";
 import { User } from "./db/models/user";
 
-export interface UserRepository{
+export interface UserRepository {
     getUserById(id: string): Promise<User | null>;
     getUserByEmailandPassword(email: string): Promise<User | null>;
     createUser(user: User): Promise<User>;
-    
 }
 
-export class UserRepositoryImpl implements UserRepository{
-    constructor(private db: Sequelize){}
+export class UserRepositoryImpl implements UserRepository {
+    constructor(private db: Sequelize) { }
 
-    public async createUser(user: User): Promise<User> {
-        try {
-            return User.create({
-                email: user.email,
-                password: user.password,
-            });
-        } catch (error) {
-            throw error;
-        }
+    createUser = async (user: User): Promise<User> => {
+        return User.create({
+            email: user.email,
+            password: user.password,
+        });
     }
 
-    public async getAllUser(): Promise<User[]>{
-        try {
-            return await User.findAll();
-        } catch (error) {
-            throw error;
-        }
+    getAllUser = async (): Promise<User[]> => {
+        return await User.findAll();
     }
 
-    public async getUserById(id: string): Promise<User | null>{
-        try {
-            return await User.findOne({ where: { id: id } });
-        } catch (error) {
-            throw error;
-        }
+    getUserById = async (id: string): Promise<User | null> => {
+        return User.findOne({ where: { id: id } });
     }
 
-    public async getUserByEmailandPassword(email: string): Promise<User | null>{
-        try {
-            return await User.findOne({ where: { email: email} });
-        } catch (error) {
-            throw new Error("Error => "+error);
-        }
+    getUserByEmailandPassword = async (email: string): Promise<User | null> => {
+        return await User.findOne({ where: { email: email } });
     }
 }

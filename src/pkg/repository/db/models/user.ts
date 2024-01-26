@@ -19,7 +19,6 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 }
 
 export const initUser = (sequelize: any) => {
-    console.log("init user");
     User.init({
         id: {
             type: DataTypes.UUID,
