@@ -9,7 +9,9 @@ export interface UserRepository{
 }
 
 export class UserRepositoryImpl implements UserRepository{
-    constructor(private db: Sequelize){}
+    constructor(private db: Sequelize){
+        this.getAllUser.bind(this)
+    }
 
     public async createUser(user: User): Promise<User> {
         try {
