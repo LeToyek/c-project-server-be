@@ -7,27 +7,15 @@ import bcrypt from "bcrypt";
 import { generateToken } from "../../middlewares/authentication";
 
 export interface UserHandler {
-  login(
-    req: CustomRequest<UserLoginReqModel>,
-    res: Response
-  ): Promise<Response>;
-  register(
-    req: CustomRequest<UserLoginReqModel>,
-    res: Response
-  ): Promise<Response>;
-  getUserData(
-    req: CustomRequest<UserLoginReqModel>,
-    res: Response
-  ): Promise<Response>;
+  login(req: CustomRequest<UserLoginReqModel>, res: Response): Promise<Response>;
+  register(req: CustomRequest<UserLoginReqModel>, res: Response): Promise<Response>;
+  getUserData(req: CustomRequest<UserLoginReqModel>, res: Response): Promise<Response>;
 }
 
 export class UserHandlerImpl implements UserHandler {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: UserRepository) { }
 
-  public async login(
-    req: CustomRequest<UserLoginReqModel>,
-    res: Response
-  ): Promise<Response> {
+  login = async (req: CustomRequest<UserLoginReqModel>, res: Response): Promise<Response> => {
     try {
       const { email, password } = req.body;
       const result = await this.userRepository.getUserByEmailandPassword(email);
@@ -57,10 +45,8 @@ export class UserHandlerImpl implements UserHandler {
       });
     }
   }
-  async register(
-    req: CustomRequest<UserLoginReqModel>,
-    res: Response
-  ): Promise<Response> {
+
+  register = async (req: CustomRequest<UserLoginReqModel>, res: Response): Promise<Response> => {
     try {
       const { email, password } = req.body;
       var hashedPassword = await bcrypt.hash(password, 10);
@@ -76,10 +62,8 @@ export class UserHandlerImpl implements UserHandler {
       return res.status(500).json({ message: "Register Failed " + error });
     }
   }
-  async getUserData(
-    req: CustomRequest<UserLoginReqModel>,
-    res: Response
-  ): Promise<Response> {
+
+  getUserData = async (req: CustomRequest<UserLoginReqModel>, res: Response): Promise<Response> => {
     return res.json({ message: "Hello World" });
   }
 }

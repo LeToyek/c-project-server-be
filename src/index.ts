@@ -1,15 +1,16 @@
-import express, { Response } from "express";
+require("dotenv").config();
+
+import express from "express";
 import cors from "cors";
-// import { sequelize } from "./pkg/repository/db/instances/sequalize";
+
 import { UserRepositoryImpl } from "./pkg/repository/userRepository";
 import { UserHandlerImpl } from "./pkg/handler/userHandler";
 import { UserRouters } from "./routers/userRouters";
-import { Sequelize } from "sequelize";
-import { initUser } from "./pkg/repository/db/models/user";
-// import { WebSocket, WebSocketServer } from "ws";
+import { initSequelize } from "./pkg/repository/db/instances/sequalize";
+
 const { Server } = require("socket.io");
 const { join } = require("node:path");
-require("dotenv").config();
+
 
 const app = express();
 const server = require("http").createServer(app);
@@ -38,23 +39,10 @@ io.on("connection", (socket:any) => {
   });
 });
 
-const start = async () => {
+const main = async () => {
   try {
-    const sequelize: Sequelize = new Sequelize(
-      "cprojector",
-      "postgres",
-      "handoko",
-      {
-        host: "localhost",
-        dialect: "postgres",
-        port: 5432,
-      }
-    );
-    await sequelize.authenticate();
-    initUser(sequelize);
-    await sequelize.sync();
-
-    const userRepository = new UserRepositoryImpl(sequelize);
+    const db = await initSequelize();
+    const userRepository = new UserRepositoryImpl(db);
     const userHandler = new UserHandlerImpl(userRepository);
     const userRouter = new UserRouters(userHandler);
     userRouter.registerRouters("/users", app);
@@ -69,4 +57,4 @@ const start = async () => {
   }
 };
 
-start();
+main();
